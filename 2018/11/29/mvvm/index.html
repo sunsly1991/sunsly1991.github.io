@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="MVC 和 MVVMMVC是一种架构模式，相对来说最有名、应用最广。但是没有一个明确的定义，不同的框架的实现也稍有出入，但有一些共通地方。 扩展阅读1 扩展阅读2 将整个应用分为Model（模型）、View（视图）、Controller（控制器）三部分，职责如下：  视图：可视化的部分，模型数据的可视化 模型：数据部分，包含数据对象和基础的操作方法 控制器：作用在模型和视图上，处理具体的逻辑。控制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mvvm 概念理解、简单实现">
+<meta property="og:url" content="http://blog.sunsly.cn/2018/11/29/mvvm/index.html">
+<meta property="og:site_name" content="跬步">
+<meta property="og:description" content="MVC 和 MVVMMVC是一种架构模式，相对来说最有名、应用最广。但是没有一个明确的定义，不同的框架的实现也稍有出入，但有一些共通地方。 扩展阅读1 扩展阅读2 将整个应用分为Model（模型）、View（视图）、Controller（控制器）三部分，职责如下：  视图：可视化的部分，模型数据的可视化 模型：数据部分，包含数据对象和基础的操作方法 控制器：作用在模型和视图上，处理具体的逻辑。控制">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.ruanyifeng.com/blogimg/asset/2015/bg2015020110.png">
+<meta property="og:updated_time" content="2018-11-29T11:46:04.785Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mvvm 概念理解、简单实现">
+<meta name="twitter:description" content="MVC 和 MVVMMVC是一种架构模式，相对来说最有名、应用最广。但是没有一个明确的定义，不同的框架的实现也稍有出入，但有一些共通地方。 扩展阅读1 扩展阅读2 将整个应用分为Model（模型）、View（视图）、Controller（控制器）三部分，职责如下：  视图：可视化的部分，模型数据的可视化 模型：数据部分，包含数据对象和基础的操作方法 控制器：作用在模型和视图上，处理具体的逻辑。控制">
+<meta name="twitter:image" content="http://www.ruanyifeng.com/blogimg/asset/2015/bg2015020110.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>mvvm 概念理解、简单实现</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2018/11/29/hello-world/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://blog.sunsly.cn/2018/11/29/mvvm/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://blog.sunsly.cn/2018/11/29/mvvm/&text=mvvm 概念理解、简单实现"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://blog.sunsly.cn/2018/11/29/mvvm/&title=mvvm 概念理解、简单实现"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://blog.sunsly.cn/2018/11/29/mvvm/&is_video=false&description=mvvm 概念理解、简单实现"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=mvvm 概念理解、简单实现&body=Check out this article: http://blog.sunsly.cn/2018/11/29/mvvm/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://blog.sunsly.cn/2018/11/29/mvvm/&title=mvvm 概念理解、简单实现"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://blog.sunsly.cn/2018/11/29/mvvm/&title=mvvm 概念理解、简单实现"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://blog.sunsly.cn/2018/11/29/mvvm/&title=mvvm 概念理解、简单实现"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://blog.sunsly.cn/2018/11/29/mvvm/&title=mvvm 概念理解、简单实现"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://blog.sunsly.cn/2018/11/29/mvvm/&name=mvvm 概念理解、简单实现&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MVC-和-MVVM"><span class="toc-number">1.</span> <span class="toc-text">MVC 和 MVVM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VM做了很多事情，来实现一个吧"><span class="toc-number">2.</span> <span class="toc-text">VM做了很多事情，来实现一个吧</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#模板解析、渲染-用数据渲染指定节点"><span class="toc-number">2.1.</span> <span class="toc-text">模板解析、渲染 - 用数据渲染指定节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现模型和视图绑定，在数据有变化时，重新渲染视图"><span class="toc-number">2.2.</span> <span class="toc-text">实现模型和视图绑定，在数据有变化时，重新渲染视图</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-先来简单粗暴的全量重新渲染。"><span class="toc-number">2.2.1.</span> <span class="toc-text">1. 先来简单粗暴的全量重新渲染。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-当数据有更新时，只重新渲染使用了该数据的节点"><span class="toc-number">2.2.2.</span> <span class="toc-text">2. 当数据有更新时，只重新渲染使用了该数据的节点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可以继续优化"><span class="toc-number">2.3.</span> <span class="toc-text">可以继续优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-短时间多次重复渲染同一节点"><span class="toc-number">2.3.1.</span> <span class="toc-text">1. 短时间多次重复渲染同一节点</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        mvvm 概念理解、简单实现
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+        <span itemprop="name">跬步</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-11-29T11:44:08.618Z" itemprop="datePublished">2018-11-29</time>
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="MVC-和-MVVM"><a href="#MVC-和-MVVM" class="headerlink" title="MVC 和 MVVM"></a><code>MVC</code> 和 <code>MVVM</code></h2><p>MVC是一种架构模式，相对来说最有名、应用最广。但是没有一个明确的定义，不同的框架的实现也稍有出入，但有一些共通地方。</p>
+<p><a href="https://draveness.me/mvx" target="_blank" rel="noopener">扩展阅读1</a></p>
+<p><a href="https://juejin.im/post/593021272f301e0058273468" target="_blank" rel="noopener">扩展阅读2</a></p>
+<p>将整个应用分为Model（模型）、View（视图）、Controller（控制器）三部分，职责如下：</p>
+<ul>
+<li>视图：可视化的部分，模型数据的可视化</li>
+<li>模型：数据部分，包含数据对象和基础的操作方法</li>
+<li>控制器：作用在模型和视图上，处理具体的逻辑。控制模型数据的改变，并通知视图需要作出改变。使视图和模型分离。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">D(User)--&gt;B(Controller)</span><br><span class="line">B(Controller)--&gt;A(View)</span><br><span class="line">B(Controller)--&gt;C(Model)</span><br><span class="line">A(View)--&gt;C(Model)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>控制器是核心，负责对模型中的数据进行更新，通知视图需要更新</li>
+<li>视图使用模型数据进行更新</li>
+<li>模型很被动，负责安静的维护数据，提供一组接口来响应数据的请求和更新</li>
+</ul>
+<blockquote>
+<p>只是一种组织的方式，目的是为了每层的职责明确，减少不同层次之间的耦合。并不一定得是这样才算是MVC模式</p>
+</blockquote>
+<p>一种更智能，当然约束也更大的方式，<code>MVVM</code>。把模型和视图进行了绑定，出现了VM，用VM的改变来驱动视图变化，同时也更新模型。</p>
+<p><img src="http://www.ruanyifeng.com/blogimg/asset/2015/bg2015020110.png" alt="MVVM"></p>
+<ul>
+<li>View和Model变得相对更独立，没有互相依赖</li>
+<li>View只负责渲染页面，没有业务逻辑，称为“被动视图”</li>
+<li>VM将Model的数据适配（绑定）到View，自动更新</li>
+<li>VM和View实现双向绑定</li>
+</ul>
+<h2 id="VM做了很多事情，来实现一个吧"><a href="#VM做了很多事情，来实现一个吧" class="headerlink" title="VM做了很多事情，来实现一个吧"></a>VM做了很多事情，来实现一个吧</h2><p>实现如下<code>bindViewToData</code>方法，并一步一步优化：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">section</span> <span class="attr">id</span>=<span class="string">'app'</span> <span class="attr">class</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">            My name is &#123;&#123; firstName + ' ' + lastName &#125;&#125;, I am &#123;&#123;age&#125;&#125; years old.</span><br><span class="line">        <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>&#123;&#123; friends &#125;&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./index.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">    const appData = &#123;</span></span><br><span class="line"><span class="undefined">        firstName: 'Lucy',</span></span><br><span class="line"><span class="undefined">        lastName: 'Green',</span></span><br><span class="line"><span class="undefined">        age: 13,</span></span><br><span class="line"><span class="undefined">        friends: ['a', 'b', 'c']</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">    bindViewToData(document.getElementById('app'), appData)</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="undefined">    // div 里面的 p 元素的内容为</span></span><br><span class="line"><span class="undefined">    // My name is Lucy Green, I am 13 years old.</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="undefined">    setTimeout(() =&gt; &#123;</span></span><br><span class="line"><span class="undefined">        appData.firstName = 'Jerry'</span></span><br><span class="line"><span class="undefined">        appData.age = 16</span></span><br><span class="line"><span class="undefined">    &#125;, 3000)</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="undefined">    // div 里面的 p 元素的内容自动变为</span></span><br><span class="line"><span class="undefined">    // My name is Jerry Green, I am 16 years old.</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="模板解析、渲染-用数据渲染指定节点"><a href="#模板解析、渲染-用数据渲染指定节点" class="headerlink" title="模板解析、渲染 - 用数据渲染指定节点"></a>模板解析、渲染 - 用数据渲染指定节点</h3><ol>
+<li>遍历节点，找出需要渲染的节点</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 深度遍历所有DOM节点，并对每个节点执行回调</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">DOMComb</span> (<span class="params">oParent, oCallback</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (oParent.hasChildNodes()) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> oNode = oParent.firstChild; oNode; oNode = oNode.nextSibling) &#123;</span><br><span class="line">            DOMComb(oNode, oCallback)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    oCallback.call(oParent)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> bindViewToData = <span class="function">(<span class="params">el, data</span>) =&gt;</span> &#123;</span><br><span class="line">    DOMComb(el, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// nodeType === 3 为Text Node</span></span><br><span class="line">        <span class="keyword">if</span> (</span><br><span class="line">            <span class="keyword">this</span>.nodeType === <span class="number">3</span> &amp;&amp;</span><br><span class="line">            <span class="keyword">this</span>.nodeValue &amp;&amp;</span><br><span class="line">            <span class="keyword">this</span>.nodeValue.match(<span class="regexp">/\&#123;\&#123;.*\&#125;\&#125;/</span>)</span><br><span class="line">        ) &#123;</span><br><span class="line">            <span class="comment">// TODO 用数据渲染节点</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>扩展阅读：</p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Node" target="_blank" rel="noopener">DOM Node</a></li>
+</ul>
+<p>遍历出来的节点，需要解析其中的特殊格式，并用数据替换。</p>
+<ol start="2">
+<li>节点中的文本替换为数据</li>
+</ol>
+<p>问题变为：将字符串变成可执行的js代码，eval 和 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function" target="_blank" rel="noopener">new Function</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Node</span> (<span class="params">node, data</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.data = data</span><br><span class="line">    <span class="comment">// DOM Node</span></span><br><span class="line">    <span class="keyword">this</span>.Node = node</span><br><span class="line">    <span class="comment">// 原始模板</span></span><br><span class="line">    <span class="keyword">this</span>.nodeTmpl = node.nodeValue</span><br><span class="line">&#125;</span><br><span class="line">Node.prototype = &#123;</span><br><span class="line">    render: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.Node.nodeValue = <span class="keyword">this</span>.nodeTmpl.replace(<span class="regexp">/\&#123;\&#123;(.*?)\&#125;\&#125;/g</span>, (match, p1, offset, string) =&gt; &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>.execute(p1)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;,</span><br><span class="line">    execute: <span class="function"><span class="keyword">function</span> (<span class="params">exp</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Function</span>(</span><br><span class="line">            ...Object.keys(<span class="keyword">this</span>.data),</span><br><span class="line">            <span class="string">`return <span class="subst">$&#123;exp&#125;</span>`</span></span><br><span class="line">        )(...Object.values(<span class="keyword">this</span>.data))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>扩展阅读：</p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function" target="_blank" rel="noopener">new Function</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/replace" target="_blank" rel="noopener">String.prototype.replace()</a></li>
+</ul>
+<p>补齐上文<code>bindViewToData</code>的TODO部分<br><figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">const bindViewToData = (el, data) =&gt; &#123;</span><br><span class="line">    DOMComb(el, function () &#123;</span><br><span class="line">        // nodeType <span class="comment">=== 3 为Text Node</span></span><br><span class="line">        if (</span><br><span class="line">            this.nodeType <span class="comment">=== 3 &amp;&amp;</span></span><br><span class="line">            this.nodeValue &amp;&amp;</span><br><span class="line">            this.nodeValue.match(/\&#123;\&#123;.*\&#125;\&#125;/)</span><br><span class="line">        ) &#123;</span><br><span class="line"><span class="addition">+            const node = new Node(this, data)</span></span><br><span class="line"></span><br><span class="line"><span class="addition">+            node.render()</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>初步实现用<code>data</code>渲染<code>el</code>内特殊格式文本的功能。</p>
+<h3 id="实现模型和视图绑定，在数据有变化时，重新渲染视图"><a href="#实现模型和视图绑定，在数据有变化时，重新渲染视图" class="headerlink" title="实现模型和视图绑定，在数据有变化时，重新渲染视图"></a>实现模型和视图绑定，在数据有变化时，重新渲染视图</h3><h4 id="1-先来简单粗暴的全量重新渲染。"><a href="#1-先来简单粗暴的全量重新渲染。" class="headerlink" title="1. 先来简单粗暴的全量重新渲染。"></a>1. 先来简单粗暴的全量重新渲染。</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 收集依赖，并在有需要的时候通知更新</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Dep</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 一个订阅者Node的数组</span></span><br><span class="line">    <span class="keyword">this</span>.subs = []</span><br><span class="line">&#125;</span><br><span class="line">Dep.prototype = &#123;</span><br><span class="line">    addSub: <span class="function"><span class="keyword">function</span> (<span class="params">node</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.subs.includes(node)) <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.subs.push(node)</span><br><span class="line">    &#125;,</span><br><span class="line">    notify: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.subs.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">node</span>) </span>&#123;</span><br><span class="line">            node.update()</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// Node添加update方法</span><br><span class="line">Node.prototype = &#123;</span><br><span class="line">    render: ...</span><br><span class="line">    execute: ...</span><br><span class="line"><span class="addition">+    update: function () &#123;</span></span><br><span class="line"><span class="addition">+        this.render()</span></span><br><span class="line"><span class="addition">+    &#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// 在第一次渲染时，建立节点对数据的依赖关系</span><br><span class="line">const bindViewToData = (el, data) =&gt; &#123;</span><br><span class="line"><span class="addition">+    const dep = new Dep()</span></span><br><span class="line"></span><br><span class="line">    DOMComb(el, function () &#123;</span><br><span class="line">        // nodeType <span class="comment">=== 3 为Text Node</span></span><br><span class="line">        if (</span><br><span class="line">            this.nodeType <span class="comment">=== 3 &amp;&amp;</span></span><br><span class="line">            this.nodeValue &amp;&amp;</span><br><span class="line">            this.nodeValue.match(/\&#123;\&#123;.*\&#125;\&#125;/)</span><br><span class="line">        ) &#123;</span><br><span class="line">            const node = new Node(this, data)</span><br><span class="line"></span><br><span class="line">            node.render()</span><br><span class="line"><span class="addition">+            dep.addSub(node)</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在数据更新时，根据依赖关系触发视图更新</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">defineReactive</span> (<span class="params">obj, key, val = null, dep</span>) </span>&#123;</span><br><span class="line">    val = obj[key]</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(obj, key, &#123;</span><br><span class="line">        get: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> val</span><br><span class="line">        &#125;,</span><br><span class="line">        set: <span class="function"><span class="keyword">function</span> (<span class="params">_val</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (val === _val) <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">            val = _val</span><br><span class="line">            dep.notify()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">// 添加数据绑定逻辑</span><br><span class="line">const bindViewToData = (el, data) =&gt; &#123;</span><br><span class="line">    const dep = new Dep()</span><br><span class="line"></span><br><span class="line">    DOMComb(el, function () &#123;</span><br><span class="line">        // nodeType <span class="comment">=== 3 为Text Node</span></span><br><span class="line">        if (</span><br><span class="line">            this.nodeType <span class="comment">=== 3 &amp;&amp;</span></span><br><span class="line">            this.nodeValue &amp;&amp;</span><br><span class="line">            this.nodeValue.match(/\&#123;\&#123;.*\&#125;\&#125;/)</span><br><span class="line">        ) &#123;</span><br><span class="line">            const node = new Node(this, data)</span><br><span class="line"></span><br><span class="line">            node.render()</span><br><span class="line">            dep.addSub(node)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line"><span class="addition">+    for (let prop in data) &#123;</span></span><br><span class="line"><span class="addition">+        defineReactive(data, prop, data[prop], dep)</span></span><br><span class="line"><span class="addition">+    &#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实现了数据更新后，自动通知视图重新渲染。但效率很低，全量更新。</p>
+<h4 id="2-当数据有更新时，只重新渲染使用了该数据的节点"><a href="#2-当数据有更新时，只重新渲染使用了该数据的节点" class="headerlink" title="2. 当数据有更新时，只重新渲染使用了该数据的节点"></a>2. 当数据有更新时，只重新渲染使用了该数据的节点</h4><p>需要更详细的数据绑定：当渲染某个节点时，获取的数据即可绑定到该节点，在数据更新时，只单独更新绑定的节点即可。</p>
+<p>需要作出如下修改:</p>
+<ol>
+<li>将前文数据绑定到所有节点，改为每个数据绑定使用该数据的节点（相关修改：Dep.target，Dep.depend(), Node.bind(), defineReactive()里属性的getter）</li>
+<li>在数据有更新时，仅重新渲染使用该数据的节点（相关修改：defineReactive()里属性的setter）</li>
+</ol>
+<p>修改后的代码如下：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">// Node 相关</span><br><span class="line"></span><br><span class="line">/* Node dom节点的包装，可以直接触发用数据重新渲染该节点 */</span><br><span class="line">function Node (node, data) &#123;</span><br><span class="line">    this.data = data</span><br><span class="line">    // DOM Node</span><br><span class="line">    this.Node = node</span><br><span class="line">    // 原始模板</span><br><span class="line">    this.nodeTmpl = node.nodeValue</span><br><span class="line"><span class="addition">+    // 依赖的数据</span></span><br><span class="line"><span class="addition">+    this.deps = []</span></span><br><span class="line">&#125;</span><br><span class="line">Node.prototype = &#123;</span><br><span class="line"><span class="addition">+    // 绑定数据，并使用数据渲染页面</span></span><br><span class="line"><span class="addition">+    bind: function () &#123;</span></span><br><span class="line"><span class="addition">+        // 设置target为当前节点</span></span><br><span class="line"><span class="addition">+        pushTarget(this)</span></span><br><span class="line"><span class="addition">+        this.render()</span></span><br><span class="line"><span class="addition">+        // 取消设置当前节点为target</span></span><br><span class="line"><span class="addition">+        popTarget()</span></span><br><span class="line"><span class="addition">+    &#125;,</span></span><br><span class="line">    // 数据更新时，回调的方法</span><br><span class="line">    update: function () &#123;</span><br><span class="line">        this.render()</span><br><span class="line">    &#125;,</span><br><span class="line">    // 使用数据渲染节点</span><br><span class="line">    render: function () &#123;</span><br><span class="line">        this.Node.nodeValue = this.nodeTmpl.replace(</span><br><span class="line">            /\&#123;\&#123;(.*?)\&#125;\&#125;/g,</span><br><span class="line">            (match, p1, offset, string) =&gt; &#123;</span><br><span class="line">            return this.execute(p1)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;,</span><br><span class="line">    // with数据，执行表达式</span><br><span class="line">    execute: function (exp) &#123;</span><br><span class="line">        return new Function(</span><br><span class="line"><span class="deletion">-            ...Object.keys(this.data),</span></span><br><span class="line"><span class="deletion">-                `return $&#123;exp&#125;`</span></span><br><span class="line"><span class="deletion">-        )(...Object.values(this.data))</span></span><br><span class="line"><span class="addition">+            'data',</span></span><br><span class="line"><span class="addition">+            `with(data) &#123;</span></span><br><span class="line"><span class="addition">+                return $&#123;exp&#125;</span></span><br><span class="line"><span class="addition">+            &#125;`</span></span><br><span class="line"><span class="addition">+        )(this.data)</span></span><br><span class="line">    &#125;,</span><br><span class="line"><span class="addition">+    // 添加依赖的数据</span></span><br><span class="line"><span class="addition">+    addDep: function (dep) &#123;</span></span><br><span class="line"><span class="addition">+        if (this.deps.includes(dep)) return false</span></span><br><span class="line"><span class="addition">+</span></span><br><span class="line"><span class="addition">+        return this.deps.push(dep)</span></span><br><span class="line"><span class="addition">+    &#125;,</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>扩展阅读：<br><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with" target="_blank" rel="noopener">with MDN</a></p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">// 数据绑定，Dep</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * observer 观察者</span><br><span class="line"> * - 数据获取时，绑定对应关系</span><br><span class="line"> * - 数据有变化，通知改变</span><br><span class="line"> */</span><br><span class="line">function defineReactive (obj, key, val = null) &#123;</span><br><span class="line">    // 数据每个值，对应一个dep实例，用于记录依赖，通知更新</span><br><span class="line"><span class="addition">+    const dep = new Dep(key)</span></span><br><span class="line">    val = obj[key]</span><br><span class="line"></span><br><span class="line">    Object.defineProperty(obj, key, &#123;</span><br><span class="line">        get: function () &#123;</span><br><span class="line"><span class="addition">+            if (Dep.target) &#123;</span></span><br><span class="line"><span class="addition">+                // 建立数据和Node的依赖关系</span></span><br><span class="line"><span class="addition">+                dep.depend()</span></span><br><span class="line"><span class="addition">+            &#125;</span></span><br><span class="line">            return val</span><br><span class="line">        &#125;,</span><br><span class="line">        set: function (_val) &#123;</span><br><span class="line">            if (val <span class="comment">=== _val) return false</span></span><br><span class="line"></span><br><span class="line">            val = _val</span><br><span class="line">            dep.notify()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line">function Dep (name) &#123;</span><br><span class="line">    // 记录下数据名字 - key</span><br><span class="line">    this.name = name</span><br><span class="line">    // 一个Node的数组</span><br><span class="line">    this.subs = []</span><br><span class="line">&#125;</span><br><span class="line">Dep.prototype = &#123;</span><br><span class="line"><span class="addition">+    // 将会指向一个Node</span></span><br><span class="line"><span class="addition">+    // 同一时间只会有一个Node被用来处理依赖关系</span></span><br><span class="line"><span class="addition">+    // 将会用在获取数据和Node的对应关系</span></span><br><span class="line"><span class="addition">+    target: null,</span></span><br><span class="line"><span class="addition">+    // 让当前指向的那个Node，依赖Dep关联的数据</span></span><br><span class="line"><span class="addition">+    depend: function () &#123;</span></span><br><span class="line"><span class="addition">+        if (Dep.target &amp;&amp; Dep.target.addDep(this)) &#123;</span></span><br><span class="line"><span class="addition">+            this.addSub(Dep.target)</span></span><br><span class="line"><span class="addition">+        &#125;</span></span><br><span class="line"><span class="addition">+    &#125;,</span></span><br><span class="line">    addSub: function (node) &#123;</span><br><span class="line">        if (this.subs.includes(node)) return false</span><br><span class="line">        return this.subs.push(node)</span><br><span class="line">    &#125;,</span><br><span class="line">    notify: function () &#123;</span><br><span class="line">        this.subs.forEach(function (node) &#123;</span><br><span class="line">            node.update()</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="addition">+Dep.target = null</span></span><br><span class="line"><span class="addition">+const targetStack = []</span></span><br><span class="line"><span class="addition">+function pushTarget (_target) &#123;</span></span><br><span class="line"><span class="addition">+    if (Dep.target) targetStack.push(Dep.target)</span></span><br><span class="line"><span class="addition">+    Dep.target = _target</span></span><br><span class="line"><span class="addition">+&#125;</span></span><br><span class="line"><span class="addition">+function popTarget () &#123;</span></span><br><span class="line"><span class="addition">+    Dep.target = targetStack.pop()</span></span><br><span class="line"><span class="addition">+&#125;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">const bindViewToData = (el, data) =&gt; &#123;</span><br><span class="line"><span class="deletion">-    const dep = new Dep()</span></span><br><span class="line"></span><br><span class="line">    for (let prop in data) &#123;</span><br><span class="line"><span class="deletion">-        defineReactive(data, prop, data[prop], dep)</span></span><br><span class="line"><span class="addition">+        defineReactive(data, prop)</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    DOMComb(el, function () &#123;</span><br><span class="line">        // nodeType <span class="comment">=== 3 为Text Node</span></span><br><span class="line">        if (</span><br><span class="line">            this.nodeType <span class="comment">=== 3 &amp;&amp;</span></span><br><span class="line">            this.nodeValue &amp;&amp;</span><br><span class="line">            this.nodeValue.match(/\&#123;\&#123;.*\&#125;\&#125;/)</span><br><span class="line">        ) &#123;</span><br><span class="line">            const node = new Node(this, data)</span><br><span class="line"></span><br><span class="line"><span class="deletion">-            node.render()</span></span><br><span class="line"><span class="deletion">-            dep.addSub(node)</span></span><br><span class="line"><span class="addition">+            node.bind()</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>致此，基本实现数据绑定节点，并用数据更新驱动页面节点重新渲染。</p>
+<h3 id="可以继续优化"><a href="#可以继续优化" class="headerlink" title="可以继续优化"></a>可以继续优化</h3><h4 id="1-短时间多次重复渲染同一节点"><a href="#1-短时间多次重复渲染同一节点" class="headerlink" title="1. 短时间多次重复渲染同一节点"></a>1. 短时间多次重复渲染同一节点</h4><p>发现问题：</p>
+<ul>
+<li>一个节点里包含多个数据字段，短时间多次更改字段数据，会频繁重新渲染节点</li>
+<li>多次修改同一数据字段值，会频繁重新渲染节点</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 工具方法</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 防抖，合并多次操作，最终一次执行</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">debounce</span> (<span class="params">fn, ms</span>) </span>&#123;</span><br><span class="line"><span class="meta">    'use strict'</span></span><br><span class="line">    <span class="keyword">let</span> timer</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        timer &amp;&amp; clearTimeout(timer)</span><br><span class="line">        timer = setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">            fn.call(<span class="keyword">this</span>, ...arguments)</span><br><span class="line">        &#125;, ms)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// Node update方法debounce处理</span><br><span class="line">Node.prototype = &#123;</span><br><span class="line"><span class="deletion">-    update: function () &#123;</span></span><br><span class="line"><span class="deletion">-        this.render()</span></span><br><span class="line"><span class="deletion">-    &#125;,</span></span><br><span class="line"><span class="addition">+    update: debounce(function () &#123;</span></span><br><span class="line"><span class="addition">+        this.render()</span></span><br><span class="line"><span class="addition">+    &#125;, 400),</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MVC-和-MVVM"><span class="toc-number">1.</span> <span class="toc-text">MVC 和 MVVM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VM做了很多事情，来实现一个吧"><span class="toc-number">2.</span> <span class="toc-text">VM做了很多事情，来实现一个吧</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#模板解析、渲染-用数据渲染指定节点"><span class="toc-number">2.1.</span> <span class="toc-text">模板解析、渲染 - 用数据渲染指定节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现模型和视图绑定，在数据有变化时，重新渲染视图"><span class="toc-number">2.2.</span> <span class="toc-text">实现模型和视图绑定，在数据有变化时，重新渲染视图</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-先来简单粗暴的全量重新渲染。"><span class="toc-number">2.2.1.</span> <span class="toc-text">1. 先来简单粗暴的全量重新渲染。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-当数据有更新时，只重新渲染使用了该数据的节点"><span class="toc-number">2.2.2.</span> <span class="toc-text">2. 当数据有更新时，只重新渲染使用了该数据的节点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可以继续优化"><span class="toc-number">2.3.</span> <span class="toc-text">可以继续优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-短时间多次重复渲染同一节点"><span class="toc-number">2.3.1.</span> <span class="toc-text">1. 短时间多次重复渲染同一节点</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://blog.sunsly.cn/2018/11/29/mvvm/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://blog.sunsly.cn/2018/11/29/mvvm/&text=mvvm 概念理解、简单实现"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://blog.sunsly.cn/2018/11/29/mvvm/&title=mvvm 概念理解、简单实现"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://blog.sunsly.cn/2018/11/29/mvvm/&is_video=false&description=mvvm 概念理解、简单实现"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=mvvm 概念理解、简单实现&body=Check out this article: http://blog.sunsly.cn/2018/11/29/mvvm/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://blog.sunsly.cn/2018/11/29/mvvm/&title=mvvm 概念理解、简单实现"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://blog.sunsly.cn/2018/11/29/mvvm/&title=mvvm 概念理解、简单实现"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://blog.sunsly.cn/2018/11/29/mvvm/&title=mvvm 概念理解、简单实现"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://blog.sunsly.cn/2018/11/29/mvvm/&title=mvvm 概念理解、简单实现"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://blog.sunsly.cn/2018/11/29/mvvm/&name=mvvm 概念理解、简单实现&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 ly
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?fc919893eb04f4b3390272f1ef8c2958";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'sunsly';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
