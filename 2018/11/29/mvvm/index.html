@@ -15,12 +15,13 @@
 <meta property="og:site_name" content="跬步">
 <meta property="og:description" content="MVC 和 MVVMMVC是一种架构模式，相对来说最有名、应用最广。但是没有一个明确的定义，不同的框架的实现也稍有出入，但有一些共通地方。 扩展阅读1 扩展阅读2 将整个应用分为Model（模型）、View（视图）、Controller（控制器）三部分，职责如下：  视图：可视化的部分，模型数据的可视化 模型：数据部分，包含数据对象和基础的操作方法 控制器：作用在模型和视图上，处理具体的逻辑。控制">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/Draveness/analyze/master/contents/architecture/images/mvx/Standard-MVC.jpg">
 <meta property="og:image" content="http://www.ruanyifeng.com/blogimg/asset/2015/bg2015020110.png">
-<meta property="og:updated_time" content="2018-11-29T12:08:11.340Z">
+<meta property="og:updated_time" content="2018-11-30T06:44:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mvvm 概念理解、简单实现">
 <meta name="twitter:description" content="MVC 和 MVVMMVC是一种架构模式，相对来说最有名、应用最广。但是没有一个明确的定义，不同的框架的实现也稍有出入，但有一些共通地方。 扩展阅读1 扩展阅读2 将整个应用分为Model（模型）、View（视图）、Controller（控制器）三部分，职责如下：  视图：可视化的部分，模型数据的可视化 模型：数据部分，包含数据对象和基础的操作方法 控制器：作用在模型和视图上，处理具体的逻辑。控制">
-<meta name="twitter:image" content="http://www.ruanyifeng.com/blogimg/asset/2015/bg2015020110.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Draveness/analyze/master/contents/architecture/images/mvx/Standard-MVC.jpg">
     
     
         
@@ -121,7 +122,7 @@
       </span>
       
     <div class="postdate">
-        <time datetime="2018-11-29T11:44:08.618Z" itemprop="datePublished">2018-11-29</time>
+        <time datetime="2018-11-29T10:54:00.000Z" itemprop="datePublished">2018-11-29</time>
     </div>
 
 
@@ -143,7 +144,7 @@
 <li>模型：数据部分，包含数据对象和基础的操作方法</li>
 <li>控制器：作用在模型和视图上，处理具体的逻辑。控制模型数据的改变，并通知视图需要作出改变。使视图和模型分离。</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">D(User)--&gt;B(Controller)</span><br><span class="line">B(Controller)--&gt;A(View)</span><br><span class="line">B(Controller)--&gt;C(Model)</span><br><span class="line">A(View)--&gt;C(Model)</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/Draveness/analyze/master/contents/architecture/images/mvx/Standard-MVC.jpg" alt="MVC"></p>
 <ul>
 <li>控制器是核心，负责对模型中的数据进行更新，通知视图需要更新</li>
 <li>视图使用模型数据进行更新</li>
