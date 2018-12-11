@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="跬步">
 <meta property="og:description" content="本文是通过一个具体问题，来整理下异步流程的回调函数实现。 思路整理整个流程会分成几步：  获取学生列表 根据每个学生的id，获取该学生的课程列表 根据学生id，和每个课程id，获取成绩 取得学生的每门课成绩后，计算平均值 每个学生成绩平均值计算完成后，执行最终回调，回传结果  其中1、2、3步，只需要在回调中遍历数组，分别调用api即可。4、5稍显复杂，涉及到一组异步操作完成后，再执行一些操作。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-10T03:43:03.690Z">
+<meta property="og:updated_time" content="2018-12-11T07:53:47.250Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="异步流程（一）- callback">
 <meta name="twitter:description" content="本文是通过一个具体问题，来整理下异步流程的回调函数实现。 思路整理整个流程会分成几步：  获取学生列表 根据每个学生的id，获取该学生的课程列表 根据学生id，和每个课程id，获取成绩 取得学生的每门课成绩后，计算平均值 每个学生成绩平均值计算完成后，执行最终回调，回传结果  其中1、2、3步，只需要在回调中遍历数组，分别调用api即可。4、5稍显复杂，涉及到一组异步操作完成后，再执行一些操作。">
@@ -70,10 +70,10 @@
     <span id="actions">
       <ul>
         
-        <li><a class="icon" href="/2018/12/04/asyncFlow0-开篇/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        <li><a class="icon" href="/2018/12/07/asyncFlow2-promise/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" href="/2018/11/29/mvvm/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" href="/2018/12/04/asyncFlow0-开篇/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -123,7 +123,7 @@
       </span>
       
     <div class="postdate">
-        <time datetime="2018-12-03T16:00:00.000Z" itemprop="datePublished">2018-12-04</time>
+        <time datetime="2018-12-04T11:27:00.000Z" itemprop="datePublished">2018-12-04</time>
     </div>
 
 

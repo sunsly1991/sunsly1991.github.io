@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="baidu-site-verification" content="XU2Gt1BeFd">
+    <meta name="description" content="本文是通过一个具体问题，来整理下异步流程的Observables实现。  Observables 是多个值的惰性推送集合。  Observable (可观察对象)1234567891011121314151617var observable = Rx.Observable.create(function (observer) &amp;#123;  observer.next(1);  observer.">
+<meta name="keywords" content="js,async,异步,Observables,RxJS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="异步流程（三）- Observables">
+<meta property="og:url" content="http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/index.html">
+<meta property="og:site_name" content="跬步">
+<meta property="og:description" content="本文是通过一个具体问题，来整理下异步流程的Observables实现。  Observables 是多个值的惰性推送集合。  Observable (可观察对象)1234567891011121314151617var observable = Rx.Observable.create(function (observer) &amp;#123;  observer.next(1);  observer.">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-11T08:26:19.092Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="异步流程（三）- Observables">
+<meta name="twitter:description" content="本文是通过一个具体问题，来整理下异步流程的Observables实现。  Observables 是多个值的惰性推送集合。  Observable (可观察对象)1234567891011121314151617var observable = Rx.Observable.create(function (observer) &amp;#123;  observer.next(1);  observer.">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>异步流程（三）- Observables</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2018/12/07/asyncFlow2-promise/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&text=异步流程（三）- Observables"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&is_video=false&description=异步流程（三）- Observables"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=异步流程（三）- Observables&body=Check out this article: http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&name=异步流程（三）- Observables&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Observable-可观察对象"><span class="toc-number">1.</span> <span class="toc-text">Observable (可观察对象)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码实现"><span class="toc-number">2.</span> <span class="toc-text">代码实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思考"><span class="toc-number">3.</span> <span class="toc-text">思考</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        异步流程（三）- Observables
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+        <span itemprop="name">跬步</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-12-10T16:00:00.000Z" itemprop="datePublished">2018-12-11</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/异步流程/">异步流程</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Observables/">Observables</a>, <a class="tag-link" href="/tags/RxJS/">RxJS</a>, <a class="tag-link" href="/tags/async/">async</a>, <a class="tag-link" href="/tags/js/">js</a>, <a class="tag-link" href="/tags/异步/">异步</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>本文是通过一个<a href="/2018/12/04/asyncFlow0-开篇/">具体问题</a>，来整理下异步流程的<a href="https://cn.rx.js.org/manual/overview.html#h12" target="_blank" rel="noopener">Observables</a>实现。</p>
+<blockquote>
+<p>Observables 是多个值的惰性推送集合。</p>
+</blockquote>
+<h2 id="Observable-可观察对象"><a href="#Observable-可观察对象" class="headerlink" title="Observable (可观察对象)"></a>Observable (可观察对象)</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> observable = Rx.Observable.create(<span class="function"><span class="keyword">function</span> (<span class="params">observer</span>) </span>&#123;</span><br><span class="line">  observer.next(<span class="number">1</span>);</span><br><span class="line">  observer.next(<span class="number">2</span>);</span><br><span class="line">  observer.next(<span class="number">3</span>);</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    observer.next(<span class="number">4</span>);</span><br><span class="line">    observer.complete();</span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'just before subscribe'</span>);</span><br><span class="line">observable.subscribe(&#123;</span><br><span class="line">  next: <span class="function"><span class="params">x</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'got value '</span> + x),</span><br><span class="line">  error: <span class="function"><span class="params">err</span> =&gt;</span> <span class="built_in">console</span>.error(<span class="string">'something wrong occurred: '</span> + err),</span><br><span class="line">  complete: <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'done'</span>),</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'just after subscribe'</span>);</span><br></pre></td></tr></table></figure>
+<p>控制台执行的结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">just before subscribe</span><br><span class="line">got value 1</span><br><span class="line">got value 2</span><br><span class="line">got value 3</span><br><span class="line">just after subscribe</span><br><span class="line">got value 4</span><br><span class="line">done</span><br></pre></td></tr></table></figure></p>
+<p>Observable（可观察对象）有什么特征：</p>
+<ul>
+<li>可以返回多个值，或者，可以进行多次求值（observer.next(data)）</li>
+<li>惰性求值，如果不调用（subscribe()），<code>Rx.Observable.create(fn)</code>里的fn不会执行；多次订阅会多次执行fn</li>
+<li>推送，是指生产者（observable对象）决定何时向消费者（订阅observable对象的方法）发送数据</li>
+</ul>
+<p>归结到我们的问题：</p>
+<ol>
+<li>在每次异步获取数据结束后，推送给订阅者数据</li>
+<li>在每次异步获取数据结束后，决定是不是完成（observer.complete()）这组操作，比如是不是已经取到了所有学生的平均成绩</li>
+</ol>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>思路和之前一样，只是换了Observable对象实现。<br>在实现结果上有些不同，没有按照取到的学生名单来输出数据，懒~</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> api = <span class="built_in">require</span>(<span class="string">'./mockServer'</span>)</span><br><span class="line"><span class="keyword">const</span> Rx = <span class="built_in">require</span>(<span class="string">'rxjs'</span>)</span><br><span class="line"></span><br><span class="line">;(<span class="function"><span class="keyword">function</span> (<span class="params">cb</span>) </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取所有学生平均成绩</span></span><br><span class="line"><span class="comment">     * 1. 获取学生列表</span></span><br><span class="line"><span class="comment">     * 2. 对每个学生执行获取平均成绩</span></span><br><span class="line"><span class="comment">     * 3. 所有成绩回去完成后执行回调</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    api.getStudents(<span class="function"><span class="params">students</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> studentsOb = Rx.Observable.create(<span class="function"><span class="params">observer</span> =&gt;</span> &#123;</span><br><span class="line">            <span class="comment">// 通过对比完成数量和学生总数量</span></span><br><span class="line">            <span class="comment">// 来确定是否所有学生平均成绩已获取完成</span></span><br><span class="line">            <span class="keyword">let</span> finishCount = <span class="number">0</span></span><br><span class="line">            students.forEach(<span class="function">(<span class="params">s, i</span>) =&gt;</span> &#123;</span><br><span class="line">                getAverage(s.id, average =&gt; &#123;</span><br><span class="line">                    observer.next(&#123;</span><br><span class="line">                        id: s.id,</span><br><span class="line">                        name: s.name,</span><br><span class="line">                        average,</span><br><span class="line">                    &#125;)</span><br><span class="line"></span><br><span class="line">                    finishCount++</span><br><span class="line">                    <span class="keyword">if</span> (finishCount &gt;= students.length) observer.complete()</span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="keyword">const</span> r = []</span><br><span class="line">        studentsOb.subscribe(&#123;</span><br><span class="line">            next: <span class="function"><span class="params">result</span> =&gt;</span> r.push(result),</span><br><span class="line">            complete: <span class="function"><span class="params">()</span> =&gt;</span> cb(r)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">getAverage</span> (<span class="params">studentId, cb</span>) </span>&#123;</span><br><span class="line">        api.getCourses(studentId, courses =&gt; &#123;</span><br><span class="line">            <span class="keyword">const</span> coursesOb = Rx.Observable.create(<span class="function"><span class="params">observer</span> =&gt;</span> &#123;</span><br><span class="line">                <span class="keyword">let</span> finishCount = <span class="number">0</span></span><br><span class="line">                courses.forEach(<span class="function"><span class="params">c</span> =&gt;</span> &#123;</span><br><span class="line">                    getEvaluation(studentId, c.id, e =&gt; &#123;</span><br><span class="line">                        observer.next(e.score)</span><br><span class="line"></span><br><span class="line">                        finishCount++</span><br><span class="line">                        <span class="keyword">if</span> (finishCount &gt;= courses.length) observer.complete()</span><br><span class="line">                    &#125;)</span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">const</span> scores = []</span><br><span class="line">            coursesOb.subscribe(&#123;</span><br><span class="line">                next: <span class="function"><span class="params">score</span> =&gt;</span> scores.push(score),</span><br><span class="line">                complete: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">                    <span class="keyword">const</span> average = scores.reduce(<span class="function">(<span class="params">preVal, score</span>) =&gt;</span> &#123;</span><br><span class="line">                        <span class="keyword">return</span> preVal + score</span><br><span class="line">                    &#125;, <span class="number">0</span>) / scores.length</span><br><span class="line"></span><br><span class="line">                    cb(average)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">getEvaluation</span> (<span class="params">studentId, courseId, cb</span>) </span>&#123;</span><br><span class="line">        api.getEvaluation(studentId, courseId, e =&gt; &#123;</span><br><span class="line">            cb(e)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)(<span class="function"><span class="params">r</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 调用函数，输出结果</span></span><br><span class="line">    <span class="built_in">console</span>.log(r)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>对于这个具体问题，提供了一种处理多个异步流程结束后执行回调的方式，不用自己实现了。其他方面也没有很特别，主要了解到Observable可以做到多个值惰性推送，留待以后观察。</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Observable-可观察对象"><span class="toc-number">1.</span> <span class="toc-text">Observable (可观察对象)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码实现"><span class="toc-number">2.</span> <span class="toc-text">代码实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思考"><span class="toc-number">3.</span> <span class="toc-text">思考</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&text=异步流程（三）- Observables"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&is_video=false&description=异步流程（三）- Observables"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=异步流程（三）- Observables&body=Check out this article: http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&name=异步流程（三）- Observables&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 ly
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?fc919893eb04f4b3390272f1ef8c2958";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'sunsly';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- 百度站长工具，自动推送 -->
+<script>
+  (function () {
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
