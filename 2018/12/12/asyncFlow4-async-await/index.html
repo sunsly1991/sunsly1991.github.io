@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="baidu-site-verification" content="XU2Gt1BeFd">
+    <meta name="description" content="本文是通过一个具体问题，来整理下异步流程的async/await实现。  当调用一个 async 函数时，会返回一个 Promise 对象。当这个 async 函数返回一个值时，Promise 的 resolve 方法会负责传递这个值；当 async 函数抛出异常时，Promise 的 reject 方法也会传递这个异常值。async 函数中可能会有 await 表达式，这会使 async 函数暂">
+<meta name="keywords" content="js,async,异步,async&#x2F;await,generator">
+<meta property="og:type" content="article">
+<meta property="og:title" content="异步流程（四）- async&#x2F;await">
+<meta property="og:url" content="http://blog.sunsly.cn/2018/12/12/asyncFlow4-async-await/index.html">
+<meta property="og:site_name" content="跬步">
+<meta property="og:description" content="本文是通过一个具体问题，来整理下异步流程的async/await实现。  当调用一个 async 函数时，会返回一个 Promise 对象。当这个 async 函数返回一个值时，Promise 的 resolve 方法会负责传递这个值；当 async 函数抛出异常时，Promise 的 reject 方法也会传递这个异常值。async 函数中可能会有 await 表达式，这会使 async 函数暂">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-12T07:29:05.185Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="异步流程（四）- async&#x2F;await">
+<meta name="twitter:description" content="本文是通过一个具体问题，来整理下异步流程的async/await实现。  当调用一个 async 函数时，会返回一个 Promise 对象。当这个 async 函数返回一个值时，Promise 的 resolve 方法会负责传递这个值；当 async 函数抛出异常时，Promise 的 reject 方法也会传递这个异常值。async 函数中可能会有 await 表达式，这会使 async 函数暂">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>异步流程（四）- async/await</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2018/12/11/asyncFlow3-observable/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://blog.sunsly.cn/2018/12/12/asyncFlow4-async-await/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://blog.sunsly.cn/2018/12/12/asyncFlow4-async-await/&text=异步流程（四）- async/await"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://blog.sunsly.cn/2018/12/12/asyncFlow4-async-await/&title=异步流程（四）- async/await"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://blog.sunsly.cn/2018/12/12/asyncFlow4-async-await/&is_video=false&description=异步流程（四）- async/await"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=异步流程（四）- async/await&body=Check out this article: http://blog.sunsly.cn/2018/12/12/asyncFlow4-async-await/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://blog.sunsly.cn/2018/12/12/asyncFlow4-async-await/&title=异步流程（四）- async/await"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://blog.sunsly.cn/2018/12/12/asyncFlow4-async-await/&title=异步流程（四）- async/await"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://blog.sunsly.cn/2018/12/12/asyncFlow4-async-await/&title=异步流程（四）- async/await"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://blog.sunsly.cn/2018/12/12/asyncFlow4-async-await/&title=异步流程（四）- async/await"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://blog.sunsly.cn/2018/12/12/asyncFlow4-async-await/&name=异步流程（四）- async/await&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#代码实现"><span class="toc-number">1.</span> <span class="toc-text">代码实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思考"><span class="toc-number">2.</span> <span class="toc-text">思考</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        异步流程（四）- async/await
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+        <span itemprop="name">跬步</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-12-11T16:00:00.000Z" itemprop="datePublished">2018-12-12</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/异步流程/">异步流程</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/async/">async</a>, <a class="tag-link" href="/tags/async-await/">async/await</a>, <a class="tag-link" href="/tags/generator/">generator</a>, <a class="tag-link" href="/tags/js/">js</a>, <a class="tag-link" href="/tags/异步/">异步</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>本文是通过一个<a href="/2018/12/04/asyncFlow0-开篇/">具体问题</a>，来整理下异步流程的<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/async_function" target="_blank" rel="noopener">async/await</a>实现。</p>
+<blockquote>
+<p>当调用一个 async 函数时，会返回一个 Promise 对象。当这个 async 函数返回一个值时，Promise 的 resolve 方法会负责传递这个值；当 async 函数抛出异常时，Promise 的 reject 方法也会传递这个异常值。async 函数中可能会有 await 表达式，这会使 async 函数暂停执行，等待 Promise  的结果出来，然后恢复async函数的执行并返回解析值（resolved）。</p>
+</blockquote>
+<p>async/await在写法上更像是同步代码，很好的解决了Promise还是用链式回调的问题。</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> api = <span class="built_in">require</span>(<span class="string">'./mockServer'</span>)</span><br><span class="line"></span><br><span class="line">;<span class="function">(<span class="params"><span class="keyword">async</span> (</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> students = <span class="keyword">await</span> api.getStudentsPromise()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> averagePromises = students.map(<span class="keyword">async</span> s =&gt; &#123;</span><br><span class="line">        <span class="keyword">return</span> getAveragePromise(s.id)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> averages = <span class="keyword">await</span> <span class="built_in">Promise</span>.all(averagePromises)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> students.map(<span class="function">(<span class="params">s, i</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            id: s.id,</span><br><span class="line">            name: s.name,</span><br><span class="line">            average: averages[i]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)().then(<span class="function"><span class="params">r</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(r)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">getAveragePromise</span> (<span class="params">studentId</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> courses = <span class="keyword">await</span> api.getCoursesPromise(studentId)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> evaluationPromises = courses.map(<span class="keyword">async</span> c =&gt; &#123;</span><br><span class="line">        <span class="keyword">return</span> api.getEvaluationPromise(studentId, c.id)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> evaluations = <span class="keyword">await</span> <span class="built_in">Promise</span>.all(evaluationPromises)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> average = evaluations.reduce(<span class="function">(<span class="params">preVal, evaluation</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> preVal + evaluation.score</span><br><span class="line">    &#125;, <span class="number">0</span>) / evaluations.length</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(average)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>从代码量来看，明显更为简洁。当然async/await在错误处理上也有明显的优势，让js里的try/catch有了很多的用武之地，这里不做赘述。</p>
+<p>开篇里也有提到使用<code>generator</code>实现，但是不准备这样做了。因为generator在做异步流程控制时，更像是提供了一种<code>暂停</code>机制，再配上迭代器(流程管理)让他自动跑起来，实现出来的效果就像是async/await，所以就不实现了。推荐大名鼎鼎的<a href="https://github.com/tj/co" target="_blank" rel="noopener">co库</a>。</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#代码实现"><span class="toc-number">1.</span> <span class="toc-text">代码实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思考"><span class="toc-number">2.</span> <span class="toc-text">思考</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://blog.sunsly.cn/2018/12/12/asyncFlow4-async-await/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://blog.sunsly.cn/2018/12/12/asyncFlow4-async-await/&text=异步流程（四）- async/await"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://blog.sunsly.cn/2018/12/12/asyncFlow4-async-await/&title=异步流程（四）- async/await"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://blog.sunsly.cn/2018/12/12/asyncFlow4-async-await/&is_video=false&description=异步流程（四）- async/await"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=异步流程（四）- async/await&body=Check out this article: http://blog.sunsly.cn/2018/12/12/asyncFlow4-async-await/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://blog.sunsly.cn/2018/12/12/asyncFlow4-async-await/&title=异步流程（四）- async/await"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://blog.sunsly.cn/2018/12/12/asyncFlow4-async-await/&title=异步流程（四）- async/await"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://blog.sunsly.cn/2018/12/12/asyncFlow4-async-await/&title=异步流程（四）- async/await"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://blog.sunsly.cn/2018/12/12/asyncFlow4-async-await/&title=异步流程（四）- async/await"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://blog.sunsly.cn/2018/12/12/asyncFlow4-async-await/&name=异步流程（四）- async/await&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 ly
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?fc919893eb04f4b3390272f1ef8c2958";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'sunsly';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- 百度站长工具，自动推送 -->
+<script>
+  (function () {
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
