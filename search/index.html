@@ -10,13 +10,14 @@
     <meta name="description" content="程序猿的学习笔记（web,js,node.js,vue,react,函数式编程,设计模式,团队建设）">
 <meta name="keywords" content="web,js,node.js,vue,react,函数式编程,设计模式,团队建设">
 <meta property="og:type" content="website">
-<meta property="og:title" content="跬步">
-<meta property="og:url" content="http://blog.sunsly.cn/tags/async-await/index.html">
+<meta property="og:title" content="Search">
+<meta property="og:url" content="http://blog.sunsly.cn/search/index.html">
 <meta property="og:site_name" content="跬步">
 <meta property="og:description" content="程序猿的学习笔记（web,js,node.js,vue,react,函数式编程,设计模式,团队建设）">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-12T07:49:52.551Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="跬步">
+<meta name="twitter:title" content="Search">
 <meta name="twitter:description" content="程序猿的学习笔记（web,js,node.js,vue,react,函数式编程,设计模式,团队建设）">
     
     
@@ -37,7 +38,7 @@
         
     
     <!-- title -->
-    <title>Tag: async/await</title>
+    <title>Search</title>
     <!-- styles -->
     <link rel="stylesheet" href="/css/style.css">
     <!-- persian styles -->
@@ -85,37 +86,22 @@
 </header>
 
         
-        <div id="archive">
-  <ul class="post-list">
-    
-    
-    
-      
-      
-      
-      
-        <h2>2018</h2>
-      
-      <li class="post-item">
-        
-    <div class="meta">
-        <time datetime="2018-12-11T16:00:00.000Z" itemprop="datePublished">2018-12-12</time>
-    </div>
-
-
-        <span>
-    
-        <a class="" href="/2018/12/12/asyncFlow4-async-await/">异步流程（四）- async/await</a>
-    
-
-
-</span>
-      </li>
-    
-  </ul>
+        <article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
   
 
-</div>
+  <div class="content" itemprop="articleBody">
+      
+        <section id="search">
+  <form>
+    <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+  </form>
+  <div id="search-result"></div>
+  <p class="search-no-result">抱歉，没有符合您搜索条件的结果。请换其它关键词再试。</p>
+</section>
+
+      
+  </div>
+</article>
 
         
         <footer id="footer">
@@ -154,6 +140,41 @@
 <script src="/js/main.js"></script>
 <!-- search -->
 
+  <script src="/js/search.js"></script>
+  <script type="text/javascript">
+  $(function() {
+
+    var $inputArea = $("input#search-input");
+    var $resultArea = document.querySelector("div#search-result");
+
+    $inputArea.focus(function() {
+      var search_path = "search.xml";
+      if (search_path.length == 0) {
+        search_path = "search.xml";
+      }
+      var path = "/" + search_path;
+      searchFunc(path, 'search-input', 'search-result');
+    });
+
+    $inputArea.keydown(function(e) {
+      if (e.which == 13) {
+        e.preventDefault();
+      }
+    });
+
+    var observer = new MutationObserver(function(mutationsList, observer) {
+      if (mutationsList[0].addedNodes) {
+        $(".search-no-result").show(200);
+      } else {
+        $(".search-no-result").hide();
+      }
+    });
+
+    observer.observe($resultArea, { childList: true });
+
+  });
+  </script>
+
 <!-- Google Analytics -->
 
 <!-- Baidu Analytics -->
@@ -177,7 +198,7 @@
             var dsq = document.createElement('script');
             dsq.type = 'text/javascript';
             dsq.async = true;
-            dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
         }());
     </script>
