@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="google-site-verification" content="7LV_ArE12XIRCQTcBaeaO3_nbtwIJMmmSsGjQf8Kbhg">
     <meta name="baidu-site-verification" content="XU2Gt1BeFd">
     <meta name="description" content="本文是通过一个具体问题，来整理下异步流程的回调函数实现。 思路整理整个流程会分成几步：  获取学生列表 根据每个学生的id，获取该学生的课程列表 根据学生id，和每个课程id，获取成绩 取得学生的每门课成绩后，计算平均值 每个学生成绩平均值计算完成后，执行最终回调，回传结果  其中1、2、3步，只需要在回调中遍历数组，分别调用api即可。4、5稍显复杂，涉及到一组异步操作完成后，再执行一些操作。">
 <meta name="keywords" content="js,async,异步,callback,回调函数">
