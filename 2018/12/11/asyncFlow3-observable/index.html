@@ -11,7 +11,7 @@
 <meta name="keywords" content="js,async,异步,Observables,RxJS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="异步流程（三）- Observables">
-<meta property="og:url" content="http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/index.html">
+<meta property="og:url" content="https://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/index.html">
 <meta property="og:site_name" content="跬步">
 <meta property="og:description" content="本文是通过一个具体问题，来整理下异步流程的Observables实现。  Observables 是多个值的惰性推送集合。  Observable (可观察对象)1234567891011121314151617var observable = Rx.Observable.create(function (observer) &amp;#123;  observer.next(1);  observer.">
 <meta property="og:locale" content="zh-CN">
@@ -92,16 +92,16 @@
     <br>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&text=异步流程（三）- Observables"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&is_video=false&description=异步流程（三）- Observables"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=异步流程（三）- Observables&body=Check out this article: http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&name=异步流程（三）- Observables&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&text=异步流程（三）- Observables"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&is_video=false&description=异步流程（三）- Observables"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=异步流程（三）- Observables&body=Check out this article: https://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&name=异步流程（三）- Observables&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -210,16 +210,16 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&text=异步流程（三）- Observables"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&is_video=false&description=异步流程（三）- Observables"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=异步流程（三）- Observables&body=Check out this article: http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&name=异步流程（三）- Observables&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&text=异步流程（三）- Observables"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&is_video=false&description=异步流程（三）- Observables"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=异步流程（三）- Observables&body=Check out this article: https://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&title=异步流程（三）- Observables"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://blog.sunsly.cn/2018/12/11/asyncFlow3-observable/&name=异步流程（三）- Observables&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

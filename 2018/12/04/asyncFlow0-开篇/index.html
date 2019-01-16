@@ -11,7 +11,7 @@
 <meta name="keywords" content="js,async,异步,callback">
 <meta property="og:type" content="article">
 <meta property="og:title" content="异步流程（零）- 开篇">
-<meta property="og:url" content="http://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/index.html">
+<meta property="og:url" content="https://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/index.html">
 <meta property="og:site_name" content="跬步">
 <meta property="og:description" content="在代码中，异步流程相对来说更复杂一些，也更值得整理下。当然，程序猿可能更喜欢看代码：  Talk is cheap. Show me the code.  一个具体问题通过一个具体问题，来逐步实现，并记录思路，题目来自这里: 获取并计算属于某个班级（假设 ID 为 75）的每个学生的平均分数。每个学生在一年内可以参加一门或多门课程。以下 API 可用于获取所需的数据。 12345678910111">
 <meta property="og:locale" content="zh-CN">
@@ -92,16 +92,16 @@
     <br>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&text=异步流程（零）- 开篇"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&title=异步流程（零）- 开篇"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&is_video=false&description=异步流程（零）- 开篇"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=异步流程（零）- 开篇&body=Check out this article: http://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&title=异步流程（零）- 开篇"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&title=异步流程（零）- 开篇"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&title=异步流程（零）- 开篇"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&title=异步流程（零）- 开篇"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&name=异步流程（零）- 开篇&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&text=异步流程（零）- 开篇"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&title=异步流程（零）- 开篇"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&is_video=false&description=异步流程（零）- 开篇"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=异步流程（零）- 开篇&body=Check out this article: https://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&title=异步流程（零）- 开篇"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&title=异步流程（零）- 开篇"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&title=异步流程（零）- 开篇"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&title=异步流程（零）- 开篇"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&name=异步流程（零）- 开篇&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -203,16 +203,16 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&text=异步流程（零）- 开篇"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&title=异步流程（零）- 开篇"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&is_video=false&description=异步流程（零）- 开篇"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=异步流程（零）- 开篇&body=Check out this article: http://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&title=异步流程（零）- 开篇"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&title=异步流程（零）- 开篇"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&title=异步流程（零）- 开篇"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&title=异步流程（零）- 开篇"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&name=异步流程（零）- 开篇&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&text=异步流程（零）- 开篇"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&title=异步流程（零）- 开篇"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&is_video=false&description=异步流程（零）- 开篇"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=异步流程（零）- 开篇&body=Check out this article: https://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&title=异步流程（零）- 开篇"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&title=异步流程（零）- 开篇"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&title=异步流程（零）- 开篇"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&title=异步流程（零）- 开篇"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://blog.sunsly.cn/2018/12/04/asyncFlow0-开篇/&name=异步流程（零）- 开篇&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
